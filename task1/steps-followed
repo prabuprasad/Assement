@@ -1,0 +1,48 @@
+NOTE : VAGRANT PACKAGE is not supporting due to mismatched Vbox version. So i just updating my work with the commands and files due to unsufficient network and system utilities.
+
+I am using ubuntu 14.04
+
+Commands:
+
+mkdir vagrant-centos
+cd vagrant-centos
+
+## list of vagrantboxes http://www.vagrantbox.es/ ############
+vagrant init centos7 https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box
+
+## the above command created a Vagrantfile ##
+
+vagrant up
+vagrant ssh
+ 
+### logged in centosOS7 machine ####
+
+cat /etc/issue
+yum update -y
+curl -fsSL https://get.docker.com/ | sh
+sudo systemctl start docker
+sudo systemctl status docker
+sudo systemctl enable docker
+mkdir ~/Docker-ubuntu-nginx
+cd Docker-ubuntu-nginx
+touch Dockerfile
+
+### created docker file from ubuntu 16.04 with nginx installed ###
+
+docker build -t ubuntu_nginx .
+docker images
+docker run -it ubunt_nginx /bin/bash 
+###### now logged into ubuntu 16.04 & added virtual host for myfirstpage.com mysecondpage.com mythirdpage.com ###
+
+docker commit 1fec4d59aa56 ubuntu_nginx:latest    
+### committed the changes with now docker image#######
+
+wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.rpm
+yum -y install vagrant_1.8.1_x86_64.rpm
+cd /etc/yum.repos.d/
+wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo
+yum install -y VirtualBox-5.1
+/sbin/rcvboxdrv setup
+cd /etc/vbox/
+vagrant package --base centos7-docker-nginx    
+##### The above package command not working due to mismatch version for vagrant and Vbox  #####
